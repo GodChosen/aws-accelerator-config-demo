@@ -1,1 +1,1 @@
-# aws-accelerator-config-demo
+# terraform-aws-infra
