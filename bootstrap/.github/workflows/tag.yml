@@ -10,7 +10,7 @@ jobs:
   ## tag
   tag:
     runs-on:
-      - demo
+      - sandbox
     steps:
       - uses: actions/checkout@v2
 
