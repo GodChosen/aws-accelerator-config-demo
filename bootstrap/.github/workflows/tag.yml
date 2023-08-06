@@ -10,7 +10,7 @@ jobs:
   ## tag
   tag:
     runs-on:
-      - sandbox
+      - "practice-account"
     steps:
       - uses: actions/checkout@v2
 
