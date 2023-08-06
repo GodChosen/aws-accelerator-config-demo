@@ -12,24 +12,12 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   security:
-    runs-on:
-      - "practice-account"
-    name: snyk
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: Vulnerability scan
-        uses: snyk/actions/iac@master
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
         with:
           command: monitor
-          args: --severity-threshold=low
-      - name: Set up Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: install Snyk CLI
-        run: npm install -g snyk
-      - name: snyk monitor
-        run: snyk iac test --report
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
