@@ -1,3 +1,54 @@
+# Demo Terraform AWS Infrastructure: Mono Repo: Terraform State Backend Bootstrap  
+
+## Overview
+
+This directory contains resources used for managing the Terraform Backend State.  
+
+## Usage
+1. Initialize the backend:
+  ```shell
+  terraform init -backend-config config.dev.hcl
+  ```
+2. Create a `dev` workspace
+  ```shell
+  terraform workspace new dev
+  ```
+3. Plan Terraform
+  ```shell
+  terraform plan -var-file dev.tfvars
+  ```
+4. Apply Terraform
+  ```shell
+  terraform apply -var-file dev.tfvars
+  ```
+
+When Terraform has finished applying the bootstrapped resources, we will need to move the local state the new bucket.
+
+:exclamation: This section assumes you have already set your `AWS_PROFILE` environment variable to the proper profile to apply the state to. :exclamation:  
+
+Once you have the tfstate file locally, you will move it to S3:  
+1. Open `main.tf` and uncomment `backend "s3" {}`:
+  ```
+  terraform {
+   required_version = "~> 1.0"
+
+   required_providers {
+     aws = {
+       version = "~> 3.0"
+       source  = "hashicorp/aws"
+     }
+   }
+
+   backend "s3" {}
+  }
+  ```
+
+2. Initialize Terraform and migrate the state to s3.
+  ```shell
+  terraform init -backend-config config.dev.hcl -migrate-state
+  ```
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
@@ -54,3 +105,4 @@
 | <a name="output_state_bucket_name"></a> [state\_bucket\_name](#output\_state\_bucket\_name) | State bucket name |
 | <a name="output_state_lock_table_arn"></a> [state\_lock\_table\_arn](#output\_state\_lock\_table\_arn) | State lock table ARN |
 | <a name="output_state_lock_table_name"></a> [state\_lock\_table\_name](#output\_state\_lock\_table\_name) | State lock table name |
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
